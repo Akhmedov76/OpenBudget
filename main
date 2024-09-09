@@ -1,2 +1,17 @@
 def view_auth_menu():
-  pass
+    print("""
+1. Register
+2. Login
+3. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_auth_menu()
