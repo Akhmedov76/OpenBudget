@@ -15,3 +15,31 @@ def view_auth_menu():
     else:
         print("Invalid choice. Please try again.")
         view_auth_menu()
+
+
+def view_admin_menu():
+    print("""
+1. Budget management                        #Byudjetni boshqarish
+2. User management
+3. Add a new manager
+4. Manage income and support                #Daromad va yordamni boshqaring
+5. Management of departments and tenders    #Bo'limlar va tenderlarni boshqarish
+6. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        pass
+    elif choice == 6:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_admin_menu()
