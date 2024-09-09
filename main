@@ -68,3 +68,25 @@ def view_budget_menu():
     else:
         print("Invalid choice. Please try again.")
         view_budget_menu()
+
+
+def view_user_menu():
+    print("""
+1. Show all tender
+2. Voting for the tender
+3. Show my tenders
+4. Logout 
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_user_menu()
