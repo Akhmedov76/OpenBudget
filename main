@@ -43,3 +43,28 @@ def view_admin_menu():
     else:
         print("Invalid choice. Please try again.")
         view_admin_menu()
+
+
+def view_budget_menu():
+    print("""
+1. Add a new budget
+2. View budgets
+3. Edit a budget
+4. Delete a budget
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_budget_menu()
