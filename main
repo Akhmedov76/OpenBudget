@@ -90,3 +90,28 @@ def view_user_menu():
     else:
         print("Invalid choice. Please try again.")
         view_user_menu()
+
+
+def view_manager_menu():
+    print("""
+1. Add a new manager
+2. Edit a manager
+3. Delete a manager
+4. View managers
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_manager_menu()
