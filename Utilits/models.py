@@ -1,5 +1,7 @@
 from Decorator.decorator import log_decorator
 from database_config.db_settings import execute_query
+from Regions_and_district.region import region_name
+from Regions_and_district.district import district_name
 
 
 class CreateTable:
@@ -34,7 +36,6 @@ class CreateTable:
             budget_name VARCHAR(255) NOT NULL,
             total_amount BIGINT NOT NULL,
             date_of_admission BIGINT NOT NULL,
-            end_date BIGINT NOT NULL,
             status BOOLEAN DEFAULT FALSE
         );'''
         execute_query(query)
@@ -76,9 +77,10 @@ class CreateTable:
         CREATE TABLE IF NOT EXISTS expenses (
             expense_id SERIAL PRIMARY KEY,
             expense_name VARCHAR(255) NOT NULL,
+            region_id BIGINT NOT NULL REFERENCES region(region_id),
+            district_id BIGINT REFERENCES district(district_id),
             amount BIGINT NOT NULL,
-            date_of_expense BIGINT NOT NULL,
-            district_id BIGINT REFERENCES district(district_id)
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );'''
         execute_query(query)
         return True
@@ -95,7 +97,8 @@ class CreateTable:
             contractor_description TEXT NOT NULL,
             contact_person VARCHAR(255) NOT NULL,
             contact_number VARCHAR(20) NOT NULL,
-            address VARCHAR(255) NOT NULL
+            address VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );'''
         execute_query(query)
         return True

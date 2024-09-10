@@ -20,7 +20,6 @@ def view_auth_menu():
         if auth.register():
             view_auth_menu()
         view_auth_menu()
-
     elif choice == 2:
         result_login = auth.login()
         if not result_login['is_login']:
@@ -146,6 +145,7 @@ Welcome to the Tender Management System!
         print("Invalid choice. Please try again.")
         view_tender_menu()
 
+
 @log_decorator
 def view_statistics_menu():
     print("""
@@ -168,6 +168,7 @@ def view_statistics_menu():
     else:
         print("Invalid choice. Please try again.")
         view_statistics_menu()
+
 
 @log_decorator
 def view_user_menu():
