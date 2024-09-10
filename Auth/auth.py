@@ -81,7 +81,6 @@ class Auth:
                 print("Invalid phone_number or password.")
                 return {'is_login': False}
 
-            # Correctly update the status for a successful login
             update_query = 'UPDATE users SET status=TRUE WHERE phone_number=%s'
             execute_query(update_query, params=(phone_number,))
 

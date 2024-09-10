@@ -1,3 +1,8 @@
+from Auth.auth import Auth
+
+auth = Auth()
+
+
 def view_auth_menu():
     print("""
 1. Register
@@ -22,7 +27,7 @@ def view_auth_menu():
             view_user_menu()
     elif choice == 3:
         print("Goodbye!")
-        pass
+        auth.logout()
     else:
         print("Invalid choice. Please try again.")
         view_auth_menu()
@@ -32,7 +37,7 @@ def view_admin_menu():
     print("""
 1. Budget management                        #Byudjetni boshqarish
 2. User management
-3. Add a new manager
+3. Manager management
 4. Manage income and support                #Daromad va yordamni boshqaring
 5. Management of departments and tenders    #Bo'limlar va tenderlarni boshqarish
 6. Logout
@@ -126,3 +131,53 @@ def view_manager_menu():
     else:
         print("Invalid choice. Please try again.")
         view_manager_menu()
+
+
+def view_department_menu():
+    print("""
+1. Add a new department
+2. Edit a department
+3. Delete a department
+4. View departments
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_department_menu()
+
+
+def view_tender_menu():
+    print("""
+1. Add a new tender
+2. Edit a tender
+3. Delete a tender
+4. View tenders
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_tender_menu()
