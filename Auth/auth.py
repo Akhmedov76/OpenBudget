@@ -3,9 +3,9 @@ import hashlib
 import threading
 
 from database_config.db_settings import Database, execute_query
-from decorator.decorator import log_decorator
-from email_sender.email import send_mail
-from email_sender.email_checker import check_email
+from Decorator.decorator import log_decorator
+from Email_sender.email import send_mail
+from Email_sender.email_checker import check_email
 
 SUPERADMIN_LOGIN = "super"
 SUPERADMIN_PASSWORD = "super"
