@@ -1,7 +1,7 @@
 import threading
 
 from Auth.auth import Auth
-from Utilits.queries import CreateTable
+from Utilits.models import CreateTable
 
 auth = Auth()
 table = CreateTable()
@@ -37,6 +37,7 @@ def view_auth_menu():
 
 def view_admin_menu():
     print("""
+Welcome admin menu:
 1. Budget management
 2. Expense management
 3. Tender management
@@ -57,8 +58,6 @@ def view_admin_menu():
         view_statistics_menu()
         view_admin_menu()
     elif choice == 5:
-        pass
-    elif choice == 6:
         print("Goodbye!")
         view_auth_menu()
     else:
@@ -93,7 +92,7 @@ def view_budget_menu():
 
 def view_expenses_menu():
     print("""
-1.  Show all expenses
+1. Show all expenses
 2. Add a new expense
 3. Edit an expense
 4. Delete an expense
@@ -167,6 +166,7 @@ def view_statistics_menu():
 
 def view_user_menu():
     print("""
+Welcome to user menu:
 1. Offer for Tender
 2. Voting for the tender
 3. Show active tenders

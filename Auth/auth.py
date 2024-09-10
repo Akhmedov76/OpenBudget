@@ -69,7 +69,7 @@ class Auth:
 
             if phone_number == ADMIN_LOGIN and password == hashlib.sha256(
                     ADMIN_PASSWORD.encode('utf-8')).hexdigest():
-                return {'is_login': True, 'role': 'super_admin'}
+                return {'is_login': True, 'role': 'admin'}
 
             query = '''
             SELECT role FROM users WHERE phone_number=%s AND password=%s
