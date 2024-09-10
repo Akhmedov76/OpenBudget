@@ -6,9 +6,20 @@ def view_auth_menu():
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        if auth.register():
+            view_auth_menu()
+        view_auth_menu()
+
     elif choice == 2:
-        pass
+        result_login = auth.login()
+        if not result_login['is_login']:
+            view_auth_menu()
+        elif result_login['role'] == 'admin':
+            view_admin_menu()
+        elif result_login['role'] == 'manager':
+            view_manager_menu()
+        elif result_login['role'] == 'user':
+            view_user_menu()
     elif choice == 3:
         print("Goodbye!")
         pass
