@@ -1,12 +1,14 @@
 import threading
 
 from Auth.auth import Auth
+from Decorator.decorator import log_decorator
 from Utilits.models import CreateTable
 
 auth = Auth()
 table = CreateTable()
 
 
+@log_decorator
 def view_auth_menu():
     print("""
 1. Register
@@ -35,6 +37,7 @@ def view_auth_menu():
         view_auth_menu()
 
 
+@log_decorator
 def view_admin_menu():
     print("""
 Welcome admin menu:
@@ -65,6 +68,7 @@ Welcome admin menu:
         view_admin_menu()
 
 
+@log_decorator
 def view_budget_menu():
     print("""
 1. Show all budgets
@@ -90,6 +94,7 @@ def view_budget_menu():
         view_budget_menu()
 
 
+@log_decorator
 def view_expenses_menu():
     print("""
 1. Show all expenses
@@ -115,6 +120,7 @@ def view_expenses_menu():
         view_expenses_menu()
 
 
+@log_decorator
 def view_tender_menu():
     print("""
 Welcome to the Tender Management System!
@@ -140,7 +146,7 @@ Welcome to the Tender Management System!
         print("Invalid choice. Please try again.")
         view_tender_menu()
 
-
+@log_decorator
 def view_statistics_menu():
     print("""
 1. Show all tenders             
@@ -163,7 +169,7 @@ def view_statistics_menu():
         print("Invalid choice. Please try again.")
         view_statistics_menu()
 
-
+@log_decorator
 def view_user_menu():
     print("""
 Welcome to user menu:
