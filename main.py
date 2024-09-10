@@ -21,8 +21,6 @@ def view_auth_menu():
             view_auth_menu()
         elif result_login['role'] == 'admin':
             view_admin_menu()
-        elif result_login['role'] == 'manager':
-            view_manager_menu()
         elif result_login['role'] == 'user':
             view_user_menu()
     elif choice == 3:
@@ -35,27 +33,30 @@ def view_auth_menu():
 
 def view_admin_menu():
     print("""
-1. Budget management                        #Byudjetni boshqarish
-2. User management
-3. Manager management
-4. Manage income and support                #Daromad va yordamni boshqaring
-5. Management of departments and tenders    #Bo'limlar va tenderlarni boshqarish
-6. Logout
+1. Budget management
+2. Expense management
+3. Tender management
+4. Manage statistics
+5. Logout
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        view_budget_menu()
+        view_admin_menu()
     elif choice == 2:
-        pass
+        view_expenses_menu()
+        view_admin_menu()
     elif choice == 3:
-        pass
+        view_tender_menu()
+        view_admin_menu()
     elif choice == 4:
-        pass
+        view_statistics_menu()
+        view_admin_menu()
     elif choice == 5:
         pass
     elif choice == 6:
         print("Goodbye!")
-        pass
+        view_auth_menu()
     else:
         print("Invalid choice. Please try again.")
         view_admin_menu()
@@ -63,8 +64,8 @@ def view_admin_menu():
 
 def view_budget_menu():
     print("""
-1. Add a new budget
-2. View budgets
+1. Show all budgets
+2. Add a new budget
 3. Edit a budget
 4. Delete a budget
 5. Logout
@@ -80,10 +81,84 @@ def view_budget_menu():
         pass
     elif choice == 5:
         print("Goodbye!")
-        pass
+        view_admin_menu()
     else:
         print("Invalid choice. Please try again.")
         view_budget_menu()
+
+
+def view_expenses_menu():
+    print("""
+1.  Show all expenses
+2. Add a new expense
+3. Edit an expense
+4. Delete an expense
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        print("Goodbye!")
+        view_admin_menu()
+    else:
+        print("Invalid choice. Please try again.")
+        view_expenses_menu()
+
+
+def view_tender_menu():
+    print("""
+Welcome to the Tender Management System!
+1. Show all tenders
+2. Create a new tender
+3. Edit a tender
+4. Delete a tender
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        pass
+    elif choice == 5:
+        print("Goodbye!")
+        view_admin_menu()
+    else:
+        print("Invalid choice. Please try again.")
+        view_tender_menu()
+
+
+def view_statistics_menu():
+    print("""
+1. Show all tenders             
+2. District with the most votes         #Eng ko'p taklifga ega ovoz
+3. District with the most offers        #Eng ko'p taklifga ega tuman
+4. Show the contractors who won the tender  #Tenderda g'olib chiqqan pudratchilarni ko'rsat
+4. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        pass
+    elif choice == 2:
+        pass
+    elif choice == 3:
+        pass
+    elif choice == 4:
+        print("Goodbye!")
+        pass
+    else:
+        print("Invalid choice. Please try again.")
+        view_statistics_menu()
 
 
 def view_user_menu():
@@ -91,6 +166,7 @@ def view_user_menu():
 1. Show all tender
 2. Voting for the tender
 3. Show my tenders
+4. Offer for Tender 
 4. Logout 
     """)
     choice = int(input("Enter your choice: "))
@@ -108,13 +184,11 @@ def view_user_menu():
         view_user_menu()
 
 
-def view_manager_menu():
+def view_vote_menu():
     print("""
-1. Add a new manager
-2. Edit a manager
-3. Delete a manager
-4. View managers
-5. Logout
+1. Vote for a tender
+2. View my votes
+3. Logout
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -122,62 +196,8 @@ def view_manager_menu():
     elif choice == 2:
         pass
     elif choice == 3:
-        pass
-    elif choice == 4:
-        pass
-    elif choice == 5:
         print("Goodbye!")
         pass
     else:
         print("Invalid choice. Please try again.")
-        view_manager_menu()
-
-
-def view_department_menu():
-    print("""
-1. Add a new department
-2. Edit a department
-3. Delete a department
-4. View departments
-5. Logout
-    """)
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        pass
-    elif choice == 2:
-        pass
-    elif choice == 3:
-        pass
-    elif choice == 4:
-        pass
-    elif choice == 5:
-        print("Goodbye!")
-        pass
-    else:
-        print("Invalid choice. Please try again.")
-        view_department_menu()
-
-
-def view_tender_menu():
-    print("""
-1. Add a new tender
-2. Edit a tender
-3. Delete a tender
-4. View tenders
-5. Logout
-    """)
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        pass
-    elif choice == 2:
-        pass
-    elif choice == 3:
-        pass
-    elif choice == 4:
-        pass
-    elif choice == 5:
-        print("Goodbye!")
-        pass
-    else:
-        print("Invalid choice. Please try again.")
-        view_tender_menu()
+        view_vote_menu()
