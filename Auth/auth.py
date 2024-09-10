@@ -67,8 +67,8 @@ class Auth:
             phone_number: str = input("Phone number: ").strip()
             password: str = hashlib.sha256(input("Password: ").strip().encode('utf-8')).hexdigest()
 
-            if phone_number == SUPERADMIN_LOGIN and password == hashlib.sha256(
-                    SUPERADMIN_PASSWORD.encode('utf-8')).hexdigest():
+            if phone_number == ADMIN_LOGIN and password == hashlib.sha256(
+                    ADMIN_PASSWORD.encode('utf-8')).hexdigest():
                 return {'is_login': True, 'role': 'super_admin'}
 
             query = '''

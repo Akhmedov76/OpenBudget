@@ -1,6 +1,10 @@
+import threading
+
 from Auth.auth import Auth
+from Utilits.queries import CreateTable
 
 auth = Auth()
+table = CreateTable()
 
 
 def view_auth_menu():
@@ -163,11 +167,11 @@ def view_statistics_menu():
 
 def view_user_menu():
     print("""
-1. Show all tender
+1. Offer for Tender
 2. Voting for the tender
-3. Show my tenders
-4. Offer for Tender 
-4. Logout 
+3. Show active tenders
+4. Show my offer
+5. Show my 
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -178,26 +182,13 @@ def view_user_menu():
         pass
     elif choice == 4:
         print("Goodbye!")
-        pass
+        view_auth_menu()
     else:
         print("Invalid choice. Please try again.")
         view_user_menu()
 
 
-def view_vote_menu():
-    print("""
-1. Vote for a tender
-2. View my votes
-3. Logout
-    """)
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        pass
-    elif choice == 2:
-        pass
-    elif choice == 3:
-        print("Goodbye!")
-        pass
-    else:
-        print("Invalid choice. Please try again.")
-        view_vote_menu()
+if __name__ == "__main__":
+    threading.Thread(target=table.create_all_table).start()
+    threading.Thread(target=auth.logout).start()
+    view_auth_menu()
