@@ -3,9 +3,11 @@ import threading
 from Auth.auth import Auth
 from Decorator.decorator import log_decorator
 from Utilits.models import CreateTable
+from Utilits.queries import QueryManager
 
 auth = Auth()
 table = CreateTable()
+query_manager = QueryManager()
 
 
 @log_decorator
@@ -78,13 +80,17 @@ def view_budget_menu():
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        query_manager.view_budgets()
+        view_budget_menu()
     elif choice == 2:
-        pass
+        query_manager.insert_budget()
+        view_budget_menu()
     elif choice == 3:
-        pass
+        query_manager.update_budget()
+        view_budget_menu()
     elif choice == 4:
-        pass
+        query_manager.delete_budget()
+        view_budget_menu()
     elif choice == 5:
         print("Goodbye!")
         view_admin_menu()

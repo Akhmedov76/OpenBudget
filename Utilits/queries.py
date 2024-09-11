@@ -122,7 +122,6 @@ class QueryManager:
         print("Contractor added successfully!")
         return True
 
-    
     @log_decorator
     def insert_contractors(self):
         query = '''INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address) 
@@ -135,7 +134,6 @@ class QueryManager:
         execute_query(query, )
         return True
 
-    
     @log_decorator
     def update_contractors(self):
         contractor_id = input("Enter the contractor ID: ").strip()
