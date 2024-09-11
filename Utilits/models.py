@@ -113,8 +113,7 @@ class CreateTable:
             tender_id SERIAL PRIMARY KEY,
             expense_id BIGINT REFERENCES expenses(expense_id),
             tender_description TEXT NOT NULL,
-            contractor_id BIGINT REFERENCES contractors(contractor_id),
-            tender_amount BIGINT NOT NULL
+            contractor_id BIGINT REFERENCES contractors(contractor_id)
         );'''
         execute_query(query)
         return True

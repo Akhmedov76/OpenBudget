@@ -1,3 +1,5 @@
+import threading
+
 from Decorator.decorator import log_decorator
 from database_config.db_settings import Database, execute_query
 
@@ -200,7 +202,7 @@ class QueryManager:
                 print("Expenses:")
                 for row in result:
                     print(
-                        f"Expense ID: {row[0]},\nExpense Name: {row[1]}, Region ID: {row[2]}, District ID: {row[3]},"
+                        f"ID: {row[0]}, Expense Name: {row[1]}, Region ID: {row[2]}, District ID: {row[3]},"
                         f" Amount: {row[4]}")
                 return True
             else:
@@ -318,10 +320,16 @@ class QueryManager:
         try:
             query = "SELECT * FROM contractors"
             result = execute_query(query)
-            print("Contractors:")
-            for row in result:
-                print(row)
-            return True
+            if result:
+                print("Contractors:")
+                for row in result:
+                    print(
+                        f"ID: {row[0]}, Contractor Name: {row[1]}, Contractor Description: {row[2]},"
+                        f" Contact Person: {row[3]}, Contact Number: {row[4]}, Address: {row[5]}")
+                return True
+            else:
+                print("No contractors found.")
+                return False
         except Exception as e:
             print(f"An error occurred while viewing contractors: {str(e)}")
             return False
@@ -332,16 +340,18 @@ class QueryManager:
         Insert a new tender into the tender table
         """
         try:
-            expense_id = int(input("Enter the expense ID: "))
+            self.view_expenses()
+            choice = int(input("Choose your interest: "))
+            expense_id = choice
             tender_description = input("Enter the tender description: ")
+            self.view_contractors()
             contractor_id = int(input("Enter the contractor ID: "))
-            tender_amount = int(input("Enter the tender amount: "))
 
             query = '''
-                INSERT INTO tender (expense_id, tender_description, contractor_id, tender_amount)
-                VALUES (%s, %s, %s, %s);
+                INSERT INTO tender (expense_id, tender_description, contractor_id)
+                VALUES (%s, %s, %s);
                 '''
-            values = (expense_id, tender_description, contractor_id, tender_amount)
+            values = (expense_id, tender_description, contractor_id)
             execute_query(query, values)
             print("Tender added successfully!")
             return True
@@ -401,10 +411,12 @@ class QueryManager:
                 print("Tenders:")
                 for row in result:
                     print(
-                        f"Tender ID: {row[0]},\nExpense ID: {row[1]}, Tender description: {row[2]}, Contractor: {row[3]},"
+                        f"Tender ID: {row[0]}, Expense ID: {row[1]}, Tender description: {row[2]}, Contractor: {row[3]},"
                         f"Tender amount: {row[4]}")
-                    print(row)
                 return True
+            else:
+                print("No tenders found.")
+                return False
         except Exception as e:
             print(f"An error occurred while viewing tenders: {str(e)}")
             return False

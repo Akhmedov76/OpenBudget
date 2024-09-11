@@ -41,7 +41,7 @@ def view_auth_menu():
 @log_decorator
 def view_admin_menu():
     print("""
-Welcome admin menu:
+
 1. Budget management
 2. Expense management
 3. Tender management
@@ -136,7 +136,6 @@ def view_expenses_menu():
 @log_decorator
 def view_tender_menu():
     print("""
-Welcome to the Tender Management System!
 1. Show all tenders
 2. Create a new tender
 3. Edit a tender
@@ -145,13 +144,17 @@ Welcome to the Tender Management System!
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        query_manager.view_tenders()
+        view_tender_menu()
     elif choice == 2:
-        pass
+        query_manager.insert_tender()
+        view_tender_menu()
     elif choice == 3:
-        pass
+        query_manager.update_tender()
+        view_tender_menu()
     elif choice == 4:
-        pass
+        query_manager.delete_tender()
+        view_tender_menu()
     elif choice == 5:
         print("Goodbye!")
         view_admin_menu()
@@ -170,7 +173,8 @@ def view_statistics_menu():
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        query_manager.view_tenders()
+        view_statistics_menu()
     elif choice == 2:
         pass
     elif choice == 3:
@@ -186,7 +190,6 @@ def view_statistics_menu():
 @log_decorator
 def view_user_menu():
     print("""
-Welcome to user menu:
 1. Offer for Tender
 2. Voting for the tender
 3. Show active tenders
