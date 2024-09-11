@@ -216,6 +216,9 @@ class QueryManager:
             execute_query(query, )
             print("Contractors added successfully!")
             return True
+        except Exception as e:
+            print(f"An error occurred while inserting contractors: {str(e)}")
+            return False
 
     @log_decorator
     def update_contractors(self):
