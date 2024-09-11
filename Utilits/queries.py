@@ -106,7 +106,7 @@ class QueryManager:
         return True
 
     @log_decorator
-    def insert_contractors(self):
+    def insert_contract_table(self):
         contractor_name = input("Enter the contractor name: ")
         contractor_description = input("Enter the contractor description: ")
         contact_person = input("Enter the contact person: ")
@@ -114,14 +114,28 @@ class QueryManager:
         address = input("Enter the address: ")
 
         query = '''
-        INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address)
-        VALUES (%s, %s, %s, %s, %s);
-        '''
+                INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address)
+                VALUES (%s, %s, %s, %s, %s);
+                '''
         values = (contractor_name, contractor_description, contact_person, contact_number, address)
         execute_query(query, values)
         print("Contractor added successfully!")
         return True
 
+    
+    @log_decorator
+    def insert_contractors(self):
+        query = '''INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address) 
+                VALUES 
+                ('Ozbekiston Qurilish', 'Qurilish materiallari va xizmatlari', 'Javlonbek S', '+998901234567', 'Toshkent, Chilonzor tumani, 123-uy'),
+                ('SamDant', 'Samarkand viloyati uchun dant va qurilish xizmatlari', 'Mukhammadbek D', '+998901234568', 'Samarkand, Bobur kochasi, 45-uy'),
+                ('TechnoBuild', 'Yangi texnologiyalar bilan qurilish', 'Nilufar A', '+998901234569', 'Buxoro, Mustaqillik kochasi, 78-uy'),
+                ('Toshkent Elektronika', 'Elektronika va avtomatlashtirish', 'Azamat J', '+998901234570', 'Toshkent, Yakkasaroy tumani, 34-uy'),
+                ('Qurilish Materiallari', 'Turli qurilish materiallari', 'Zebo M', '+998901234571', 'Fargona, Gofur Gulom kochasi, 12-uy');'''
+        execute_query(query, )
+        return True
+
+    
     @log_decorator
     def update_contractors(self):
         contractor_id = input("Enter the contractor ID: ").strip()
