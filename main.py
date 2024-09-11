@@ -76,7 +76,8 @@ def view_budget_menu():
 2. Add a new budget
 3. Edit a budget
 4. Delete a budget
-5. Logout
+5. Declaring the season open
+6. Logout
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -92,6 +93,9 @@ def view_budget_menu():
         query_manager.delete_budget()
         view_budget_menu()
     elif choice == 5:
+        query_manager.declaring_season_open()
+        view_budget_menu()
+    elif choice == 6:
         print("Goodbye!")
         view_admin_menu()
     else:
@@ -110,13 +114,17 @@ def view_expenses_menu():
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        query_manager.view_expenses()
+        view_expenses_menu()
     elif choice == 2:
-        pass
+        query_manager.insert_expense()
+        view_expenses_menu()
     elif choice == 3:
-        pass
+        query_manager.update_expense()
+        view_expenses_menu()
     elif choice == 4:
-        pass
+        query_manager.delete_expense()
+        view_expenses_menu()
     elif choice == 5:
         print("Goodbye!")
         view_admin_menu()
@@ -158,7 +166,6 @@ def view_statistics_menu():
 1. Show all tenders             
 2. District with the most votes         #Eng ko'p taklifga ega ovoz
 3. District with the most offers        #Eng ko'p taklifga ega tuman
-4. Show the contractors who won the tender  #Tenderda g'olib chiqqan pudratchilarni ko'rsat
 4. Logout
     """)
     choice = int(input("Enter your choice: "))

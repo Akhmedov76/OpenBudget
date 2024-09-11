@@ -34,8 +34,8 @@ class CreateTable:
         CREATE TABLE IF NOT EXISTS budgets (
             budget_id SERIAL PRIMARY KEY,
             budget_name VARCHAR(255) NOT NULL,
-            total_amount BIGINT NOT NULL,
-            date_of_admission BIGINT NOT NULL,
+            total_amount FLOAT NOT NULL,
+            date_of_admission DATE NOT NULL,
             status BOOLEAN DEFAULT FALSE
         );'''
         execute_query(query)

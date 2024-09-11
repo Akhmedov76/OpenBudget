@@ -13,11 +13,11 @@ class QueryManager:
         try:
             budget_name = input("Enter the budget name: ")
             total_amount = int(input("Enter the total amount: "))
-            date_of_admission = int(input("Enter the date of admission (timestamp): "))
+            date_of_admission = input("Enter the date of admission (timestamp): ")
 
             query = '''
             INSERT INTO budgets (budget_name, total_amount, date_of_admission)
-            VALUES (%s, %s, %s, %s, %s);
+            VALUES (%s, %s, %s);
             '''
             params = (budget_name, total_amount, date_of_admission)
             execute_query(query, params)
@@ -68,27 +68,58 @@ class QueryManager:
             return False
 
     @log_decorator
+    def declaring_season_open(self):
+        """
+        Declare a season open for a budget by setting the is_open flag to True
+        """
+        try:
+            budget_id = input("Enter the budget ID: ").strip()
+
+            query = "UPDATE budgets SET status = TRUE WHERE budget_id = %s"
+            execute_query(query, (budget_id,))
+            print("Season open for budget successfully!")
+            return True
+        except ValueError:
+            print("Invalid input. Please try again.")
+            return False
+        except Exception as e:
+            print(f"An error occurred while declaring season open: {str(e)}")
+            return False
+
+    @log_decorator
     def view_budgets(self):
         """
         View all budgets in the budgets table
         """
         try:
             query = "SELECT * FROM budgets"
-            result = execute_query(query)
-            print("Budgets:")
-            for row in result:
-                print(row)
+            result = execute_query(query, fetch='all')
+            if result:
+                print("Budgets:")
+                for row in result:
+                    print(
+                        f"Budget ID: {row[0]}\n, Budget Name: {row[1]}, Total Amount: {row[2]}, Date of Admission: {row[3]},"
+                        f" Status: {row[4]}")
             return True
+        except ValueError:
+            print("Invalid input. Please try again.")
+            return False
+        except KeyError:
+            print("Error: Budgets table not found.")
+            return False
+        except TypeError:
+            print("Error: Connection to the database failed.")
+            return False
         except Exception as e:
             print(f"An error occurred while viewing budgets: {str(e)}")
-            return False
+        return False
 
     def insert_expense(self):
         """
         Insert a new expense into the expenses table
         """
         try:
-            expense_name = input("Enter the expense name: ")
+            expense_name = input("Enter the expense name: ").capitalize().strip()
             region_id = int(input("Enter the region ID: "))
             district_id = input("Enter the district ID (or leave blank if not applicable): ")
             if not district_id:
@@ -98,9 +129,9 @@ class QueryManager:
             amount = int(input("Enter the amount: "))
 
             query = '''
-            INSERT INTO expenses (expense_name, region_id, district_id, amount)
-            VALUES (%s, %s, %s, %s);
-            '''
+                INSERT INTO expenses (expense_name, region_id, district_id, amount)
+                VALUES (%s, %s, %s, %s);
+                '''
             values = (expense_name, region_id, district_id, amount)
             execute_query(query, values)
             print("Expense added successfully!")
@@ -119,7 +150,7 @@ class QueryManager:
         """
         try:
             expense_id = input("Enter the expense ID: ").strip()
-            new_expense_name = input("Enter new expense name: ")
+            new_expense_name = input("Enter new expense name: ").capitalize().strip()
             new_region_id = int(input("Enter new region ID: "))
             new_district_id = input("Enter new district ID (or leave blank if not applicable): ")
             if not new_district_id:
@@ -129,7 +160,7 @@ class QueryManager:
             new_amount = int(input("Enter new amount: "))
 
             query = '''UPDATE expenses SET expense_name = %s, region_id = %s, district_id = %s, amount = %s 
-                       WHERE expense_id = %s'''
+                           WHERE expense_id = %s'''
             params = (new_expense_name, new_region_id, new_district_id, new_amount, expense_id)
             execute_query(query, params)
             print("Expense updated successfully!")
@@ -164,14 +195,29 @@ class QueryManager:
         """
         try:
             query = "SELECT * FROM expenses"
-            result = execute_query(query)
-            print("Expenses:")
-            for row in result:
-                print(row)
-            return True
-        except Exception as e:
-            print(f"An error occurred while viewing expenses: {str(e)}")
+            result = execute_query(query, fetch="all")
+            if result:
+                print("Expenses:")
+                for row in result:
+                    print(
+                        f"Expense ID: {row[0]},\nExpense Name: {row[1]}, Region ID: {row[2]}, District ID: {row[3]},"
+                        f" Amount: {row[4]}")
+                return True
+            else:
+                print("No expenses found.")
+                return False
+        except ValueError:
+            print("Invalid input. Please try again.")
             return False
+        except KeyError:
+            print("Error: Budgets table not found.")
+            return False
+        except TypeError:
+            print("Error: Connection to the database failed.")
+            return False
+        except Exception as e:
+            print(f"An error occurred while viewing budgets: {str(e)}")
+        return False
 
     @log_decorator
     def insert_contract_table(self):
@@ -186,9 +232,9 @@ class QueryManager:
             address = input("Enter the address: ")
 
             query = '''
-                    INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address)
-                    VALUES (%s, %s, %s, %s, %s);
-                    '''
+                        INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address)
+                        VALUES (%s, %s, %s, %s, %s);
+                        '''
             values = (contractor_name, contractor_description, contact_person, contact_number, address)
             execute_query(query, values)
             print("Contractor added successfully!")
@@ -207,12 +253,12 @@ class QueryManager:
         """
         try:
             query = '''INSERT INTO contractors (contractor_name, contractor_description, contact_person, contact_number, address) 
-                    VALUES 
-                    ('Ozbekiston Qurilish', 'Qurilish materiallari va xizmatlari', 'Javlonbek S', '+998901234567', 'Toshkent, Chilonzor tumani, 123-uy'),
-                    ('SamDant', 'Samarkand viloyati uchun dant va qurilish xizmatlari', 'Mukhammadbek D', '+998901234568', 'Samarkand, Bobur kochasi, 45-uy'),
-                    ('TechnoBuild', 'Yangi texnologiyalar bilan qurilish', 'Nilufar A', '+998901234569', 'Buxoro, Mustaqillik kochasi, 78-uy'),
-                    ('Toshkent Elektronika', 'Elektronika va avtomatlashtirish', 'Azamat J', '+998901234570', 'Toshkent, Yakkasaroy tumani, 34-uy'),
-                    ('Qurilish Materiallari', 'Turli qurilish materiallari', 'Zebo M', '+998901234571', 'Fargona, Gofur Gulom kochasi, 12-uy');'''
+                        VALUES 
+                        ('Ozbekiston Qurilish', 'Qurilish materiallari va xizmatlari', 'Javlonbek S', '+998901234567', 'Toshkent, Chilonzor tumani, 123-uy'),
+                        ('SamDant', 'Samarkand viloyati uchun dant va qurilish xizmatlari', 'Mukhammadbek D', '+998901234568', 'Samarkand, Bobur kochasi, 45-uy'),
+                        ('TechnoBuild', 'Yangi texnologiyalar bilan qurilish', 'Nilufar A', '+998901234569', 'Buxoro, Mustaqillik kochasi, 78-uy'),
+                        ('Toshkent Elektronika', 'Elektronika va avtomatlashtirish', 'Azamat J', '+998901234570', 'Toshkent, Yakkasaroy tumani, 34-uy'),
+                        ('Qurilish Materiallari', 'Turli qurilish materiallari', 'Zebo M', '+998901234571', 'Fargona, Gofur Gulom kochasi, 12-uy');'''
             execute_query(query, )
             print("Contractors added successfully!")
             return True
@@ -234,7 +280,7 @@ class QueryManager:
             new_address = input("Enter new contractor address: ")
 
             query = '''UPDATE contractors SET contractor_name = %s, contractor_description = %s, contact_person = %s,
-                       contact_number = %s, address = %s WHERE contractor_id = %s'''
+                           contact_number = %s, address = %s WHERE contractor_id = %s'''
             params = (
                 new_contractor_name, new_contractor_description, new_contact_person, new_contact_number, new_address,
                 contractor_id)
@@ -292,9 +338,9 @@ class QueryManager:
             tender_amount = int(input("Enter the tender amount: "))
 
             query = '''
-            INSERT INTO tender (expense_id, tender_description, contractor_id, tender_amount)
-            VALUES (%s, %s, %s, %s);
-            '''
+                INSERT INTO tender (expense_id, tender_description, contractor_id, tender_amount)
+                VALUES (%s, %s, %s, %s);
+                '''
             values = (expense_id, tender_description, contractor_id, tender_amount)
             execute_query(query, values)
             print("Tender added successfully!")
@@ -318,7 +364,7 @@ class QueryManager:
             new_tender_amount = int(input("Enter new tender amount: "))
 
             query = '''UPDATE tender SET tender_description = %s, contractor_id = %s, tender_amount = %s 
-                       WHERE tender_id = %s'''
+                           WHERE tender_id = %s'''
             params = (new_tender_description, new_contractor_id, new_tender_amount, tender_id)
             execute_query(query, params)
             print("Tender updated successfully!")
@@ -350,11 +396,15 @@ class QueryManager:
         """
         try:
             query = "SELECT * FROM tender"
-            result = execute_query(query)
-            print("Tenders:")
-            for row in result:
-                print(row)
-            return True
+            result = execute_query(query, fetch="all")
+            if result:
+                print("Tenders:")
+                for row in result:
+                    print(
+                        f"Tender ID: {row[0]},\nExpense ID: {row[1]}, Tender description: {row[2]}, Contractor: {row[3]},"
+                        f"Tender amount: {row[4]}")
+                    print(row)
+                return True
         except Exception as e:
             print(f"An error occurred while viewing tenders: {str(e)}")
             return False
@@ -370,9 +420,9 @@ class QueryManager:
             vote_value = int(input("Enter the vote value (1-5): "))
 
             query = '''
-            INSERT INTO votes (tender_id, user_id, vote_value)
-            VALUES (%s, %s, %s);
-            '''
+                INSERT INTO votes (tender_id, user_id, vote_value)
+                VALUES (%s, %s, %s);
+                '''
             values = (tender_id, user_id, vote_value)
             execute_query(query, values)
             print("Vote added successfully!")

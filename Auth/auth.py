@@ -7,8 +7,8 @@ from Decorator.decorator import log_decorator
 from Email_sender.email import send_mail
 from Email_sender.email_checker import check_email
 
-ADMIN_LOGIN = "super"
-ADMIN_PASSWORD = "super"
+ADMIN_LOGIN = "admin"
+ADMIN_PASSWORD = "admin"
 
 
 class Auth:
