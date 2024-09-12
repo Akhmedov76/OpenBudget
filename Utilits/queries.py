@@ -667,14 +667,43 @@ class QueryManager:
 
     @log_decorator
     def show_active_tenders(self):
+
         query = '''
-        SELECT e.expense_id, b.budget_name, d.direction_name, r.region_name, dis.name, e.amount 
-        FROM expenses e JOIN budgets b ON e.budget_id = b.budget_id 
-        JOIN directions d ON e.direction_id = d.direction_id JOIN region r ON e.region_id = r.region_id 
+        SELECT e.expense_id, b.budget_name, d.direction_name, r.region_name, dis.name, e.amount
+        FROM expenses e JOIN budgets b ON e.budget_id = b.budget_id
+        JOIN directions d ON e.direction_id = d.direction_id
+        JOIN region r ON e.region_id = r.region_id
         JOIN district dis ON e.district_id = dis.district_id ;'''
         result = execute_query(query, fetch='all')
         print('Active tenders:')
         for row in result:
             print(
-                f'Expense ID: {row[0]}, Budget Name: {row[1]}, Direction Name: {row[2]}, Region Name: {row[3]}, District Name: {row[4]}, Amount: {row[5]}')
+                f'Expense ID: {row[0]}, Budget Name: {row[1]}, Direction Name: {row[2]}, Region Name: {row[3]}, '
+                f'District Name: {row[4]}, Amount: {row[5]}')
+            return True
+
+    @log_decorator
+    def show_all_votes(self):
+        query = '''
+        SELECT COUNT(vote_value) AS votesa
+        FROM votes '''
+        result = execute_query(query, fetch='all')
+        for row in result:
+            print(f'Votes: {row[0]}\n')
+        return True
+
+    @log_decorator
+    def show_all_offers_information(self):
+        query = '''
+        SELECT o.offer_id, b.budget_name, t.tender_description, r.region_name, d.name, o.offer_description
+        FROM offers o JOIN budgets b ON o.budget_id = b.budget_id
+        JOIN tender t ON o.tender_id = t.tender_id
+        JOIN region r ON o.region_id = r.region_id
+        JOIN district d ON o.district_id = d.district_id ;'''
+        result = execute_query(query, fetch='all')
+        print('All offers information:')
+        for row in result:
+            print(
+                f'ID: {row[0]}, Budget Name: {row[1]}, Tender Name: {row[2]},\nRegion Name: {row[3]}, District Name: {row[4]}, '
+                f'Description: {row[5]}')
             return True

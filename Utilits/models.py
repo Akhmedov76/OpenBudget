@@ -196,8 +196,8 @@ class CreateTable:
         self.create_direction_table()
         self.create_contractors_table()
         # query_manager.insert_contractors()
+        self.create_votes_table()
         self.create_expenses_table()
         self.create_tender_table()
-        self.create_votes_table()
         self.create_offer_table()
         return True

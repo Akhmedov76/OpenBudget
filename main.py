@@ -67,7 +67,9 @@ def view_admin_menu():
         view_statistics_menu()
         view_admin_menu()
     elif choice == 6:
-        pass
+        query_manager.show_active_tenders()
+        query_manager.show_all_votes()
+        view_admin_menu()
     elif choice == 7:
         print("Goodbye!")
         view_auth_menu()
@@ -243,9 +245,11 @@ def view_user_menu():
         view_user_menu()
     elif choice == 3:
         query_manager.show_active_tenders()
+        query_manager.show_all_votes()
         view_user_menu()
     elif choice == 4:
-        pass
+        query_manager.show_all_offers_information()
+        view_user_menu()
     elif choice == 5:
         pass
     elif choice == 6:
