@@ -121,7 +121,8 @@ class QueryManager:
         Insert a new expense into the expenses table
         """
         try:
-            expense_name = input("Enter the expense name: ").capitalize().strip()
+            self.directions()
+            direction_name = input("Enter the direction name: ").capitalize().strip()
             region_id = int(input("Enter the region ID: "))
             district_id = input("Enter the district ID (or leave blank if not applicable): ")
             if not district_id:
@@ -131,10 +132,10 @@ class QueryManager:
             amount = int(input("Enter the amount: "))
 
             query = '''
-                INSERT INTO expenses (expense_name, region_id, district_id, amount)
+                INSERT INTO expenses (direction_name, region_id, district_id, amount)
                 VALUES (%s, %s, %s, %s);
                 '''
-            values = (expense_name, region_id, district_id, amount)
+            values = (direction_name, region_id, district_id, amount)
             execute_query(query, values)
             print("Expense added successfully!")
             return True
@@ -152,7 +153,7 @@ class QueryManager:
         """
         try:
             expense_id = input("Enter the expense ID: ").strip()
-            new_expense_name = input("Enter new expense name: ").capitalize().strip()
+            new_direction_name = input("Enter new direction name name: ").capitalize().strip()
             new_region_id = int(input("Enter new region ID: "))
             new_district_id = input("Enter new district ID (or leave blank if not applicable): ")
             if not new_district_id:
@@ -161,9 +162,9 @@ class QueryManager:
                 new_district_id = int(new_district_id)
             new_amount = int(input("Enter new amount: "))
 
-            query = '''UPDATE expenses SET expense_name = %s, region_id = %s, district_id = %s, amount = %s 
+            query = '''UPDATE expenses SET direction_name = %s, region_id = %s, district_id = %s, amount = %s 
                            WHERE expense_id = %s'''
-            params = (new_expense_name, new_region_id, new_district_id, new_amount, expense_id)
+            params = (new_direction_name, new_region_id, new_district_id, new_amount, expense_id)
             execute_query(query, params)
             print("Expense updated successfully!")
             return True
@@ -494,4 +495,22 @@ class QueryManager:
             return True
         except Exception as e:
             print(f"An error occurred while viewing votes: {str(e)}")
+            return False
+
+    @log_decorator
+    def insert_directions(self):
+        try:
+            direct_name = input('Enter direction name: ')
+            query = '''
+                INSERT INTO directions (direction_name) VALUES (%s);
+            '''
+            params = direct_name
+            execute_query(query, params)
+            print('Directions inserted successfully')
+            return True
+        except ValueError:
+            print("Invalid input. Please try again.")
+            return False
+        except Exception as e:
+            print(f"An error occurred while inserting tender: {str(e)}")
             return False
