@@ -1,6 +1,7 @@
 import threading
 
 from Decorator.decorator import log_decorator
+from Regions_and_district.region import get_regions
 from database_config.db_settings import Database, execute_query
 
 
@@ -8,6 +9,7 @@ class QueryManager:
     def __init__(self):
         self.db = Database
 
+    @log_decorator
     def insert_budget(self):
         """
         Insert a new budget into the budgets table
@@ -75,6 +77,7 @@ class QueryManager:
         Declare a season open for a budget by setting the is_open flag to True
         """
         try:
+            self.view_budgets()
             budget_id = input("Enter the budget ID: ").strip()
 
             query = "UPDATE budgets SET status = TRUE WHERE budget_id = %s"
@@ -100,9 +103,12 @@ class QueryManager:
                 print("Budgets:")
                 for row in result:
                     print(
-                        f"Budget ID: {row[0]}\n, Budget Name: {row[1]}, Total Amount: {row[2]}, Date of Admission: {row[3]},"
+                        f"Budget ID: {row[0]}, Budget Name: {row[1]}, Total Amount: {row[2]}, Date of Admission: {row[3]},"
                         f" Status: {row[4]}")
-            return True
+                return True
+            else:
+                print("No budgets found.")
+                return True
         except ValueError:
             print("Invalid input. Please try again.")
             return False
@@ -121,8 +127,9 @@ class QueryManager:
         Insert a new expense into the expenses table
         """
         try:
-            self.directions()
-            direction_name = input("Enter the direction name: ").capitalize().strip()
+            self.view_directions()
+            direction_id = input("Enter the direction id: ").strip()
+            get_regions()
             region_id = int(input("Enter the region ID: "))
             district_id = input("Enter the district ID (or leave blank if not applicable): ")
             if not district_id:
@@ -132,10 +139,10 @@ class QueryManager:
             amount = int(input("Enter the amount: "))
 
             query = '''
-                INSERT INTO expenses (direction_name, region_id, district_id, amount)
+                INSERT INTO expenses (direction_id, region_id, district_id, amount)
                 VALUES (%s, %s, %s, %s);
                 '''
-            values = (direction_name, region_id, district_id, amount)
+            values = (direction_id, region_id, district_id, amount)
             execute_query(query, values)
             print("Expense added successfully!")
             return True
@@ -153,7 +160,7 @@ class QueryManager:
         """
         try:
             expense_id = input("Enter the expense ID: ").strip()
-            new_direction_name = input("Enter new direction name name: ").capitalize().strip()
+            new_direction_id = input("Enter new direction id name: ").strip()
             new_region_id = int(input("Enter new region ID: "))
             new_district_id = input("Enter new district ID (or leave blank if not applicable): ")
             if not new_district_id:
@@ -162,9 +169,9 @@ class QueryManager:
                 new_district_id = int(new_district_id)
             new_amount = int(input("Enter new amount: "))
 
-            query = '''UPDATE expenses SET direction_name = %s, region_id = %s, district_id = %s, amount = %s 
+            query = '''UPDATE expenses SET direction_id = %s, region_id = %s, district_id = %s, amount = %s 
                            WHERE expense_id = %s'''
-            params = (new_direction_name, new_region_id, new_district_id, new_amount, expense_id)
+            params = (new_direction_id, new_region_id, new_district_id, new_amount, expense_id)
             execute_query(query, params)
             print("Expense updated successfully!")
             return True
@@ -325,7 +332,7 @@ class QueryManager:
                 print("Contractors:")
                 for row in result:
                     print(
-                        f"ID: {row[0]}, Contractor Name: {row[1]}, Contractor Description: {row[2]},"
+                        f"ID: {row[0]}, Name: {row[1]}, Description: {row[2]},"
                         f" Contact Person: {row[3]}, Contact Number: {row[4]}, Address: {row[5]}")
                 return True
             else:
@@ -371,23 +378,24 @@ class QueryManager:
         try:
             tender_id = input("Enter the tender ID: ").strip()
             new_tender_description = input("Enter new tender description: ")
-            new_contractor_id = int(input("Enter new contractor ID: "))
-            new_tender_amount = int(input("Enter new tender amount: "))
+            new_contractor_id = input("Enter new contractor ID: ")
 
-            query = '''UPDATE tender SET tender_description = %s, contractor_id = %s, tender_amount = %s 
-                           WHERE tender_id = %s'''
-            params = (new_tender_description, new_contractor_id, new_tender_amount, tender_id)
+            query = '''UPDATE tender SET tender_description = %s, contractor_id = %s WHERE tender_id = %s'''
+            params = (new_tender_description, new_contractor_id, tender_id)
             execute_query(query, params)
             print("Tender updated successfully!")
             return True
         except ValueError:
             print("Invalid input. Please try again.")
             return False
+        except Exception as e:
+            print(f"An error occurred while updating tender: {str(e)}")
+            return False
 
     @log_decorator
     def delete_tender(self):
         """
-        Delete a tender from the tender table based given tender ID
+        Delete a tender from the tender table based on the given tender ID
         """
         try:
             tender_id = input("Enter the tender ID: ").strip()
@@ -407,13 +415,13 @@ class QueryManager:
         """
         try:
             query = "SELECT * FROM tender"
-            result = execute_query(query, fetch="all")
+            result = execute_query(query)
             if result:
                 print("Tenders:")
                 for row in result:
                     print(
-                        f"Tender ID: {row[0]}, Expense ID: {row[1]}, Tender description: {row[2]}, Contractor: {row[3]},"
-                        f"Tender amount: {row[4]}")
+                        f"ID: {row[0]}, Expense ID: {row[1]}, Description: {row[2]},"
+                        f" Contractor ID: {row[3]}")
                 return True
             else:
                 print("No tenders found.")
@@ -423,13 +431,20 @@ class QueryManager:
             return False
 
     @log_decorator
+    def check_user_is_login(self):
+        query = "SELECT * FROM users WHERE status=TRUE"
+        result = execute_query(query, fetch="one")
+        return result['id']
+
+    @log_decorator
     def insert_votes(self):
         """
         Insert a new vote into the votes table
         """
         try:
+            self.view_tenders()
             tender_id = int(input("Enter the tender ID: "))
-            user_id = int(input("Enter the user ID: "))
+            user_id = self.check_user_is_login
             vote_value = int(input("Enter the vote value (1-5): "))
 
             query = '''
@@ -489,10 +504,14 @@ class QueryManager:
         try:
             query = "SELECT * FROM votes"
             result = execute_query(query)
-            print("Votes:")
-            for row in result:
-                print(row)
-            return True
+            if result:
+                print("Votes:")
+                for row in result:
+                    print(f"Vote id: {row[0]}, Tender id: {row[1]}, User id: {row[2]}, vote_value: {row[3]}")
+                return True
+            else:
+                print("No votes found.")
+                return False
         except Exception as e:
             print(f"An error occurred while viewing votes: {str(e)}")
             return False
@@ -500,11 +519,11 @@ class QueryManager:
     @log_decorator
     def insert_directions(self):
         try:
-            direct_name = input('Enter direction name: ')
+            direct_name = input('Enter direction name: ').capitalize().strip()
             query = '''
                 INSERT INTO directions (direction_name) VALUES (%s);
             '''
-            params = direct_name
+            params = (direct_name,)
             execute_query(query, params)
             print('Directions inserted successfully')
             return True
@@ -514,3 +533,130 @@ class QueryManager:
         except Exception as e:
             print(f"An error occurred while inserting tender: {str(e)}")
             return False
+
+    @log_decorator
+    def update_direction(self):
+        try:
+            direction_id = input('Enter direction ID to update: ')
+            new_direct_name = input('Enter new direction name: ')
+            query = '''
+                UPDATE directions SET direction_name = %s WHERE direction_id = %s;
+            '''
+            params = (new_direct_name, direction_id)
+            execute_query(query, params)
+            print('Direction updated successfully')
+            return True
+        except ValueError:
+            print("Invalid input. Please try again.")
+            return False
+        except Exception as e:
+            print(f"An error occurred while updating direction: {str(e)}")
+            return False
+
+    @log_decorator
+    def delete_direction(self):
+        try:
+            direction_id = int(input("Enter direction ID: "))
+            query = "DELETE FROM directions WHERE direction_id = %s"
+            execute_query(query, (direction_id,))
+            print('Direction deleted successfully')
+            return True
+        except Exception as e:
+            print(f"An error occurred while deleting direction: {str(e)}")
+            return False
+
+    @log_decorator
+    def view_directions(self):
+        try:
+            query = "SELECT * FROM directions;"
+            result = execute_query(query, fetch="all")
+            print("Current directions:")
+            if result:
+                for row in result:
+                    print(f"ID: {row[0]}, Direction Name: {row[1]}")
+                return True
+            else:
+                print("No directions found.")
+                return False
+        except Exception as e:
+            print(f"An error occurred while viewing directions: {str(e)}")
+            return False
+
+    @log_decorator
+    def check_budgets(self, budget_id):
+        query = '''
+        SELECT * FROM budgets WHERE budget_id = %s AND status = TRUE;
+        '''
+        params = (budget_id,)
+        result = execute_query(query, params, fetch="one")
+        if result:
+            return True
+        else:
+            return False
+
+    @log_decorator
+    def insert_offer_table(self):
+        self.view_budgets()
+        budget_id = int(input("Enter a budget ID: "))
+        if not self.check_budgets(budget_id):
+            print("Budget not found or inactive.")
+            return self.insert_offer_table()
+        else:
+            tender_id = int(input("Enter a tender ID: "))
+        region_id = int(input("Enter a region ID: "))
+        district_id = int(input("Enter a district ID: "))
+        direction_id = input("Enter a direction ID: ")
+        user_id = int(input("Enter a user ID: "))
+        offer_description = input("Enter a description of the offer to insert into the database: ")
+        query = '''
+        INSERT INTO offers (budget_id, tender_id, region_id, district_id, direction_id, user_id, offer_description) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        '''
+        params = (budget_id, tender_id, region_id, district_id, direction_id, user_id, offer_description)
+        execute_query(query, params)
+        print('Offer inserted successfully')
+        return True
+
+    @log_decorator
+    def update_offer(self):
+        offer_id = int(input("Enter an offer ID to update: "))
+        new_budget_id = int(input("Enter a new budget ID: "))
+        new_tender_id = int(input("Enter a new tender ID: "))
+        new_region_id = int(input("Enter a new region ID: "))
+        new_district_id = int(input("Enter a new district ID: "))
+        new_direction_name = input("Enter a new direction name: ")
+        new_user_id = int(input("Enter a new user ID: "))
+        offer_description = input("Enter a new description for the offer: ")
+        query = '''
+        UPDATE offers SET budget_id=%s, tender_id=%s, region_id=%s, district_id=%s, direction_name=%s, user_id=%s,
+         offer_description=%s, WHERE offer_id=%s
+        '''
+        params = (new_budget_id, new_tender_id, new_region_id, new_district_id, new_direction_name, new_user_id,
+                  offer_description, offer_id)
+        execute_query(query, params)
+        print('Offer updated successfully')
+        return True
+
+    @log_decorator
+    def delete_offer(self):
+        offer_id = int(input("Enter an offer ID to delete: "))
+        query = '''
+        DELETE FROM offers WHERE offer_id=%s
+        '''
+        params = (offer_id,)
+        execute_query(query, params)
+        print('Offer deleted successfully')
+        return True
+
+    @log_decorator
+    def view_offers(self):
+        query = '''
+        SELECT * FROM offers
+        '''
+        result = execute_query(query)
+        print('Offers:')
+        for row in result:
+            print(
+                f'Offer ID: {row[0]}, Budget ID: {row[1]}, Tender ID: {row[2]}, Region ID: {row[3]}, District ID: {row[4]}, '
+                f'Direction Name: {row[5]}, User ID: {row[6]}, Offer Description: {row[7]}')
+        return True

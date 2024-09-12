@@ -43,30 +43,63 @@ def view_admin_menu():
     print("""
 
 1. Budget management
-2. Expense management
-3. Tender management
-4. Manage statistics
-5. Logout
+2. Direction management
+3. Expense management
+4. Tender management
+5. Manage statistics
+6. Logout
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
         view_budget_menu()
         view_admin_menu()
     elif choice == 2:
-        view_expenses_menu()
+        view_directions_menu()
         view_admin_menu()
     elif choice == 3:
-        view_tender_menu()
+        view_expenses_menu()
         view_admin_menu()
     elif choice == 4:
-        view_statistics_menu()
+        view_tender_menu()
         view_admin_menu()
     elif choice == 5:
+        view_statistics_menu()
+        view_admin_menu()
+    elif choice == 6:
         print("Goodbye!")
         view_auth_menu()
     else:
         print("Invalid choice. Please try again.")
         view_admin_menu()
+
+
+def view_directions_menu():
+    print("""
+1. Show all directions
+2. Add directions
+3. Edit directions
+4. Delete directions
+5. Logout
+    """)
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        query_manager.view_directions()
+        view_directions_menu()
+    if choice == 2:
+        query_manager.insert_directions()
+        view_directions_menu()
+    elif choice == 3:
+        query_manager.update_direction()
+        view_directions_menu()
+    elif choice == 4:
+        query_manager.delete_direction()
+        view_directions_menu()
+    elif choice == 5:
+        print("Goodbye!")
+        view_admin_menu()
+    else:
+        print("Invalid choice. Please try again.")
+        view_directions_menu()
 
 
 @log_decorator
@@ -198,7 +231,8 @@ def view_user_menu():
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
-        pass
+        query_manager.insert_offer_table()
+        view_user_menu()
     elif choice == 2:
         query_manager.insert_votes()
         view_user_menu()

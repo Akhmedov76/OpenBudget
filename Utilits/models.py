@@ -2,6 +2,9 @@ from Decorator.decorator import log_decorator
 from database_config.db_settings import execute_query
 from Regions_and_district.region import region_name
 from Regions_and_district.district import district_name
+from Utilits.queries import QueryManager
+
+query_manager = QueryManager()
 
 
 class CreateTable:
@@ -76,7 +79,7 @@ class CreateTable:
         query = '''
         CREATE TABLE IF NOT EXISTS expenses (
             expense_id SERIAL PRIMARY KEY,
-            direction_name VARCHAR(255) REFERENCES directions(direction_name),
+            direction_id BIGINT REFERENCES directions(direction_id),
             region_id BIGINT NOT NULL REFERENCES region(region_id),
             district_id BIGINT REFERENCES district(district_id),
             amount BIGINT NOT NULL,
@@ -152,11 +155,11 @@ class CreateTable:
         query = '''
         CREATE TABLE IF NOT EXISTS offers (
             offer_id SERIAL PRIMARY KEY,
-            budget_id BIGINT REFERENCES budget(budget_id),
+            budget_id BIGINT REFERENCES budgets(budget_id),
             tender_id BIGINT REFERENCES tender(tender_id),
             region_id BIGINT REFERENCES region(region_id),
             district_id BIGINT REFERENCES district(district_id),
-            direction_name VARCHAR(255) REFERENCES directions(direction_name),
+            direction_id BIGINT REFERENCES directions(direction_id),
             user_id BIGINT REFERENCES users(id),
             offer_description TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -172,11 +175,14 @@ class CreateTable:
         self.create_users_table()
         self.create_budgets_table()
         self.create_region_table()
+        # region_name()
         self.create_district_table()
+        # district_name()
+        self.create_direction_table()
+        self.create_contractors_table()
+        # query_manager.insert_contractors()
         self.create_expenses_table()
         self.create_tender_table()
-        self.create_contractors_table()
         self.create_votes_table()
-        self.create_direction_table()
         self.create_offer_table()
         return True
