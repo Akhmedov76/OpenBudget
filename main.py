@@ -205,8 +205,8 @@ def view_tender_menu():
 def view_statistics_menu():
     print("""
 1. Show all tenders             
-2. District with the most votes         #Eng ko'p taklifga ega ovoz
-3. District with the most offers        #Eng ko'p taklifga ega tuman
+2. District with the most votes         #Eng ko'p taklifga ega tender   
+3. District with the most offers 
 4. Logout
     """)
     choice = int(input("Enter your choice: "))
@@ -216,7 +216,8 @@ def view_statistics_menu():
     elif choice == 2:
         pass
     elif choice == 3:
-        pass
+        query_manager.count_offer()
+        view_statistics_menu()
     elif choice == 4:
         print("Goodbye!")
         pass
@@ -251,7 +252,8 @@ def view_user_menu():
         query_manager.show_all_offers_information()
         view_user_menu()
     elif choice == 5:
-        pass
+        query_manager.show_all_my_votes()
+        view_user_menu()
     elif choice == 6:
         print("Goodbye!")
         view_auth_menu()

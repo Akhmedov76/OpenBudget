@@ -699,11 +699,45 @@ class QueryManager:
         FROM offers o JOIN budgets b ON o.budget_id = b.budget_id
         JOIN tender t ON o.tender_id = t.tender_id
         JOIN region r ON o.region_id = r.region_id
-        JOIN district d ON o.district_id = d.district_id ;'''
+        JOIN district d ON o.district_id = d.district_id WHERE EXISTS (
+        SELECT 1 FROM users u
+        WHERE u.id = o.user_id
+    );'''
         result = execute_query(query, fetch='all')
         print('All offers information:')
         for row in result:
             print(
                 f'ID: {row[0]}, Budget Name: {row[1]}, Tender Name: {row[2]},\nRegion Name: {row[3]}, District Name: {row[4]}, '
                 f'Description: {row[5]}')
+            return True
+
+    @log_decorator
+    def show_all_my_votes(self):
+        query = f'''
+        SELECT v.vote_id, t.tender_description, u.name
+        FROM votes v JOIN tender t on v.vote_id = t.tender_id
+        JOIN users u on v.user_id = u.id;'''
+        result = execute_query(query, fetch='all')
+        print('All my votes:')
+        for row in result:
+            print(f'Vote ID: {row[0]}, Tender Name: {row[1]}, User Name: {row[2]}')
+            return True
+
+    @log_decorator
+    def district_with_the_most_votes(self):
+        pass
+
+    @log_decorator
+    def count_offer(self):
+        query = '''
+        SELECT d.district_id, d.name AS district_name, COUNT(o.offer_id) AS offer_count
+        FROM offers o
+        JOIN district d ON o.district_id = d.district_id
+        GROUP BY d.district_id, d.name
+        ORDER BY offer_count DESC
+        LIMIT 1; '''
+        result = execute_query(query, fetch='one')
+        if result:
+            print(
+                f'District with the most offers: District ID: {result[0]}, District Name: {result[1]}, Offer Count: {result[2]}')
             return True
