@@ -193,14 +193,15 @@ def view_user_menu():
 1. Offer for Tender
 2. Voting for the tender
 3. Show active tenders
-4. Show my offer
-5. Show my 
+4. Show my offer   
+5. Show the amount allocated between districts              # write them out here
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
         pass
     elif choice == 2:
-        pass
+        query_manager.insert_votes()
+        view_user_menu()
     elif choice == 3:
         pass
     elif choice == 4:
