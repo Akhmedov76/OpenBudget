@@ -127,6 +127,8 @@ class QueryManager:
         Insert a new expense into the expenses table
         """
         try:
+            self.view_budgets()
+            budget_id = input("Enter the budget ID: ").strip()
             self.view_directions()
             direction_id = input("Enter the direction id: ").strip()
             get_regions()
@@ -139,10 +141,10 @@ class QueryManager:
             amount = int(input("Enter the amount: "))
 
             query = '''
-                INSERT INTO expenses (direction_id, region_id, district_id, amount)
-                VALUES (%s, %s, %s, %s);
+                INSERT INTO expenses (budget_id, direction_id, region_id, district_id, amount)
+                VALUES (%s,%s, %s, %s, %s);
                 '''
-            values = (direction_id, region_id, district_id, amount)
+            values = (budget_id, direction_id, region_id, district_id, amount)
             execute_query(query, values)
             print("Expense added successfully!")
             return True
@@ -444,19 +446,21 @@ class QueryManager:
         try:
             self.view_tenders()
             tender_id = int(input("Enter the tender ID: "))
-            user_id = self.check_user_is_login
-            vote_value = int(input("Enter the vote value (1-5): "))
+            user_id = self.check_user_is_login()
 
             query = '''
-                INSERT INTO votes (tender_id, user_id, vote_value)
-                VALUES (%s, %s, %s);
+                INSERT INTO votes (tender_id, user_id)
+                VALUES (%s, %s);
                 '''
-            values = (tender_id, user_id, vote_value)
+            values = (tender_id, user_id)
             execute_query(query, values)
             print("Vote added successfully!")
             return True
         except ValueError:
             print("Invalid input. Please try again.")
+            return False
+        except Exception as e:
+            print(f"Error: {e}")
             return False
 
     @log_decorator
@@ -660,3 +664,17 @@ class QueryManager:
                 f'Offer ID: {row[0]}, Budget ID: {row[1]}, Tender ID: {row[2]}, Region ID: {row[3]}, District ID: {row[4]}, '
                 f'Direction Name: {row[5]}, User ID: {row[6]}, Offer Description: {row[7]}')
         return True
+
+    @log_decorator
+    def show_active_tenders(self):
+        query = '''
+        SELECT e.expense_id, b.budget_name, d.direction_name, r.region_name, dis.name, e.amount 
+        FROM expenses e JOIN budgets b ON e.budget_id = b.budget_id 
+        JOIN directions d ON e.direction_id = d.direction_id JOIN region r ON e.region_id = r.region_id 
+        JOIN district dis ON e.district_id = dis.district_id ;'''
+        result = execute_query(query, fetch='all')
+        print('Active tenders:')
+        for row in result:
+            print(
+                f'Expense ID: {row[0]}, Budget Name: {row[1]}, Direction Name: {row[2]}, Region Name: {row[3]}, District Name: {row[4]}, Amount: {row[5]}')
+            return True

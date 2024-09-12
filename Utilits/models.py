@@ -79,6 +79,7 @@ class CreateTable:
         query = '''
         CREATE TABLE IF NOT EXISTS expenses (
             expense_id SERIAL PRIMARY KEY,
+            budget_id BIGINT REFERENCES budgets(budget_id),
             direction_id BIGINT REFERENCES directions(direction_id),
             region_id BIGINT NOT NULL REFERENCES region(region_id),
             district_id BIGINT REFERENCES district(district_id),
@@ -131,7 +132,7 @@ class CreateTable:
             vote_id SERIAL PRIMARY KEY,
             tender_id BIGINT REFERENCES tender(tender_id),
             user_id BIGINT REFERENCES users(id),
-            vote_value INTEGER NOT NULL
+            vote_value INTEGER DEFAULT 1 NOT NULL
         );'''
         execute_query(query)
         return True
@@ -163,6 +164,20 @@ class CreateTable:
             user_id BIGINT REFERENCES users(id),
             offer_description TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );'''
+        execute_query(query)
+        return True
+
+    @log_decorator
+    def tenders_win_table(self):
+        """
+        Create tenders_win table if it doesn't exist
+        """
+        query = '''
+        CREATE TABLE IF NOT EXISTS winners (
+            tender_win_id SERIAL PRIMARY KEY,
+            tender_id BIGINT REFERENCES tender(tender_id),
+            vote_id BIGINT REFERENCES vote(vote_id)
         );'''
         execute_query(query)
         return True

@@ -47,7 +47,8 @@ def view_admin_menu():
 3. Expense management
 4. Tender management
 5. Manage statistics
-6. Logout
+6. The total number of votes for the tender
+7. Logout
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -66,6 +67,8 @@ def view_admin_menu():
         view_statistics_menu()
         view_admin_menu()
     elif choice == 6:
+        pass
+    elif choice == 7:
         print("Goodbye!")
         view_auth_menu()
     else:
@@ -227,7 +230,9 @@ def view_user_menu():
 2. Voting for the tender
 3. Show active tenders
 4. Show my offer   
-5. Show the amount allocated between districts              # write them out here
+5. Show my vote
+6. The total number of votes for the tender
+7. Logout
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -237,8 +242,13 @@ def view_user_menu():
         query_manager.insert_votes()
         view_user_menu()
     elif choice == 3:
-        pass
+        query_manager.show_active_tenders()
+        view_user_menu()
     elif choice == 4:
+        pass
+    elif choice == 5:
+        pass
+    elif choice == 6:
         print("Goodbye!")
         view_auth_menu()
     else:
