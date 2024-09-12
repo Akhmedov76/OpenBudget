@@ -76,7 +76,7 @@ class CreateTable:
         query = '''
         CREATE TABLE IF NOT EXISTS expenses (
             expense_id SERIAL PRIMARY KEY,
-            expense_name VARCHAR(255) NOT NULL,
+            direction_name VARCHAR(255) REFERENCES directions(direction_name),
             region_id BIGINT NOT NULL REFERENCES region(region_id),
             district_id BIGINT REFERENCES district(district_id),
             amount BIGINT NOT NULL,
@@ -134,6 +134,37 @@ class CreateTable:
         return True
 
     @log_decorator
+    def create_direction_table(self):
+        query = '''
+        CREATE TABLE IF NOT EXISTS directions (
+            direction_id SERIAL PRIMARY KEY,
+            direction_name VARCHAR(255) NOT NULL
+        )
+        '''
+        execute_query(query)
+        return True
+
+    @log_decorator
+    def create_offer_table(self):
+        """
+        Create offers table if it doesn't exist
+        """
+        query = '''
+        CREATE TABLE IF NOT EXISTS offers (
+            offer_id SERIAL PRIMARY KEY,
+            budget_id BIGINT REFERENCES budget(budget_id),
+            tender_id BIGINT REFERENCES tender(tender_id),
+            region_id BIGINT REFERENCES region(region_id),
+            district_id BIGINT REFERENCES district(district_id),
+            direction_name VARCHAR(255) REFERENCES directions(direction_name),
+            user_id BIGINT REFERENCES users(id),
+            offer_description TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );'''
+        execute_query(query)
+        return True
+
+    @log_decorator
     def create_all_table(self):
         """
         Create all tables.
@@ -146,4 +177,6 @@ class CreateTable:
         self.create_tender_table()
         self.create_contractors_table()
         self.create_votes_table()
+        self.create_direction_table()
+        self.create_offer_table()
         return True
