@@ -689,7 +689,7 @@ class QueryManager:
         FROM votes '''
         result = execute_query(query, fetch='all')
         for row in result:
-            print(f'Votes: {row[0]}\n')
+            print(f'Total votes: {row[0]}\n')
         return True
 
     @log_decorator
@@ -707,7 +707,7 @@ class QueryManager:
         print('All offers information:')
         for row in result:
             print(
-                f'ID: {row[0]}, Budget Name: {row[1]}, Tender Name: {row[2]},\nRegion Name: {row[3]}, District Name: {row[4]}, '
+                f'ID: {row[0]}, Season Name: {row[1]}, Tender Name: {row[2]},\nRegion Name: {row[3]}, District Name: {row[4]}, '
                 f'Description: {row[5]}')
             return True
 
@@ -722,10 +722,6 @@ class QueryManager:
         for row in result:
             print(f'Vote ID: {row[0]}, Tender Name: {row[1]}, User Name: {row[2]}')
             return True
-
-    @log_decorator
-    def district_with_the_most_votes(self):
-        pass
 
     @log_decorator
     def count_offer(self):

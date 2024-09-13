@@ -42,7 +42,7 @@ def view_auth_menu():
 def view_admin_menu():
     print("""
 
-1. Budget management
+1. Season management
 2. Direction management
 3. Expense management
 4. Tender management
@@ -110,10 +110,10 @@ def view_directions_menu():
 @log_decorator
 def view_budget_menu():
     print("""
-1. Show all budgets
-2. Add a new budget
-3. Edit a budget
-4. Delete a budget
+1. Show all season
+2. Add a new season
+3. Edit a season
+4. Delete a season
 5. Declaring the season open
 6. Logout
     """)
@@ -220,7 +220,7 @@ def view_statistics_menu():
         view_statistics_menu()
     elif choice == 4:
         print("Goodbye!")
-        pass
+        view_auth_menu()
     else:
         print("Invalid choice. Please try again.")
         view_statistics_menu()
@@ -246,7 +246,6 @@ def view_user_menu():
         view_user_menu()
     elif choice == 3:
         query_manager.show_active_tenders()
-        query_manager.show_all_votes()
         view_user_menu()
     elif choice == 4:
         query_manager.show_all_offers_information()
@@ -255,6 +254,10 @@ def view_user_menu():
         query_manager.show_all_my_votes()
         view_user_menu()
     elif choice == 6:
+        query_manager.show_all_offers_information()
+        query_manager.show_all_votes()
+        view_user_menu()
+    elif choice == 7:
         print("Goodbye!")
         view_auth_menu()
     else:
