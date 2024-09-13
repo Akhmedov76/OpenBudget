@@ -1,7 +1,9 @@
 import threading
 
 from Auth.auth import Auth
+
 from Decorator.decorator import log_decorator
+
 from Utilits.models import CreateTable
 from Utilits.queries import QueryManager
 from Utilits.queries_for_tender import TenderManager
@@ -126,8 +128,7 @@ def view_budget_menu():
 2. Add a new season
 3. Edit a season
 4. Delete a season
-5. Declaring the season open
-6. Exit the program and return to the admin menu 
+5. Exit the program and return to the admin menu 
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -143,9 +144,6 @@ def view_budget_menu():
         budget_manager.delete_budget()
         view_budget_menu()
     elif choice == 5:
-        query_manager.declaring_season_open()
-        view_budget_menu()
-    elif choice == 6:
         print("Goodbye!")
         view_admin_menu()
     else:
@@ -218,7 +216,7 @@ def view_statistics_menu():
     print("""
 1. Show all tenders               
 2. District with the most offers 
-4. Exit the program with the most auth menu
+3. Exit the program with the most auth menu
     """)
     choice = int(input("Enter your choice: "))
     if choice == 1:
@@ -227,7 +225,7 @@ def view_statistics_menu():
     elif choice == 2:
         query_manager.count_offer()
         view_statistics_menu()
-    elif choice == 4:
+    elif choice == 3:
         print("Goodbye!")
         view_auth_menu()
     else:

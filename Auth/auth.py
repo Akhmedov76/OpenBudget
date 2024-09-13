@@ -6,7 +6,7 @@ from Database_config.db_settings import Database, execute_query
 from Decorator.decorator import log_decorator
 from Email_sender.email import send_mail
 from Email_sender.email_checker import check_email
-from Utilits.queries import validate_phone_number
+from Utilits.queries import validate_phone_number, generate_code
 
 ADMIN_LOGIN = "admin"
 ADMIN_PASSWORD = "admin"
@@ -28,7 +28,14 @@ class Auth:
         phone_number = input("Enter phone number: ").strip()
         validate_phone_number(phone_number)
         address = input("Enter address: ").strip()
+        gen_pass = generate_code()
+        send_mail(email, 'Verification code:', gen_pass)
+        confirm_password = input("Enter confirmation password: ").strip()
+        if confirm_password != gen_pass:
+            print("Passwords do not match.")
+            return False
         password = input("Enter password: ").strip()
+
         hash_pass = hashlib.sha256(password.strip().encode('utf-8')).hexdigest()
         role = 'user'
         try:
