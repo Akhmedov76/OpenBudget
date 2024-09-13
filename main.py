@@ -204,9 +204,8 @@ def view_tender_menu():
 @log_decorator
 def view_statistics_menu():
     print("""
-1. Show all tenders             
-2. District with the most votes         #Eng ko'p taklifga ega tender   
-3. District with the most offers 
+1. Show all tenders               
+2. District with the most offers 
 4. Logout
     """)
     choice = int(input("Enter your choice: "))
@@ -214,8 +213,6 @@ def view_statistics_menu():
         query_manager.view_tenders()
         view_statistics_menu()
     elif choice == 2:
-        pass
-    elif choice == 3:
         query_manager.count_offer()
         view_statistics_menu()
     elif choice == 4:
