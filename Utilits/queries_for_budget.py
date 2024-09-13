@@ -9,21 +9,30 @@ class BudgetManager:
     @log_decorator
     def insert_budget(self):
         """
-        Insert a new budget into the budgets table
+        Insert a new budget into the budgets table and update the previous budget's status to false
         """
         try:
+            update_query = '''
+            UPDATE budgets
+            SET status = false
+            WHERE status = true;
+            '''
+            execute_query(update_query)
+
             budget_name = input("Enter the budget name: ")
             total_amount = int(input("Enter the total amount: "))
             date_of_admission = input("Enter the date of admission (timestamp): ")
 
-            query = '''
-            INSERT INTO budgets (budget_name, total_amount, date_of_admission)
-            VALUES (%s, %s, %s);
+            insert_query = '''
+            INSERT INTO budgets (budget_name, total_amount, date_of_admission, status)
+            VALUES (%s, %s, %s, true);
             '''
             params = (budget_name, total_amount, date_of_admission)
-            execute_query(query, params)
-            print("Budget added successfully!")
+            execute_query(insert_query, params)
+
+            print("Budget added successfully and old budget's status false!")
             return True
+
         except ValueError:
             print("Invalid input. Please try again.")
             return False
@@ -67,8 +76,6 @@ class BudgetManager:
         except Exception as e:
             print(f"An error occurred while deleting budget: {str(e)}")
             return False
-
-
 
     @log_decorator
     def view_budgets(self):
