@@ -1,7 +1,7 @@
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    datefmt='%m/%d/%Y %H:%M:%S', filename='logs/info_logs.log', filemode='w')
+                    datefmt='%m/%d/%Y %H:%M:%S', filename='Logs/info_logs.log', filemode='w')
 
 logging = logging.getLogger(__name__)
 

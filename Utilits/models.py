@@ -1,5 +1,5 @@
 from Decorator.decorator import log_decorator
-from database_config.db_settings import execute_query
+from Database_config.db_settings import execute_query
 from Regions_and_district.region import region_name
 from Regions_and_district.district import district_name
 from Utilits.queries import QueryManager

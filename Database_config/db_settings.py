@@ -3,7 +3,7 @@ from Decorator.decorator import log_decorator
 
 from psycopg2.extras import DictCursor
 
-from database_config.config import config
+from Database_config.config import config
 
 
 class Database:

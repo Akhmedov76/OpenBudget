@@ -1,4 +1,4 @@
-from database_config.db_settings import execute_query
+from Database_config.db_settings import execute_query
 
 
 def region_name():

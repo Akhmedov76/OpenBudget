@@ -2,10 +2,11 @@ import datetime
 import hashlib
 import threading
 
-from database_config.db_settings import Database, execute_query
+from Database_config.db_settings import Database, execute_query
 from Decorator.decorator import log_decorator
 from Email_sender.email import send_mail
 from Email_sender.email_checker import check_email
+from Utilits.queries import validate_phone_number
 
 ADMIN_LOGIN = "admin"
 ADMIN_PASSWORD = "admin"
@@ -25,6 +26,7 @@ class Auth:
         name = input("Enter name: ").capitalize().strip()
         email = input("Enter email: ").strip()
         phone_number = input("Enter phone number: ").strip()
+        validate_phone_number(phone_number)
         address = input("Enter address: ").strip()
         password = input("Enter password: ").strip()
         hash_pass = hashlib.sha256(password.strip().encode('utf-8')).hexdigest()
